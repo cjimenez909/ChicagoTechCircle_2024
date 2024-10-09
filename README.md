@@ -1,3 +1,13 @@
+### Overview
 This repo contains code I authored and co-authored over Summer 2024 working as a Tech Consultant/Research Intern for Chicago Tech Circle in partnership with Argonne National Laboratory. 
 The functions.py file is originally from our group's repo. I re-uploaded it in this repo with only functions I contributed to. 
-These functions are used to automatically move a microscope's stage and move from place to place within a sample in a specified order as well as to detect squares (in this case diamond membranes) using OpenCV. 
+These functions are used to automatically move a microscope's stage and move from place to place within a sample in a specified order as well as to detect squares (in this case, diamond membranes to be used as qubits) using OpenCV. 
+
+### Automated Microscope Stage Movement
+Note: Here, "chuck" refers to the microscope stage.
+
+My code and main process includes programmatically moving the chuck to decrease the amount of manual movement required. This code assumes the chip is square, has the same number of rows and columns, has the same number of membranes in each row, and that the membranes are all evenly/uniformly spaced.
+
+A theoretical coordinate system is created based on the specific chip’s measurements which are passed as arguments to get_mem_coords and calculate_corner_coords in functions.py. The function get_mem_coords creates the theoretical coordinate system and returns a list of the x- and y-coordinate pairs for the center of each membrane in order of traversal. A matrix is also created by get_affine_transform to map between this theoretical coordinate system and the chuck device coordinates that are visible on the National Instruments PM40 software. The matrix is developed based on input of 6 x- and y-coordinate pairs: 3 from the theoretical coordinate system (returned by calculate_corner_coords) and 3 from the chuck device coordinate system (obtained manually). The function apply_affine_all_mems then calls apply_affine_transform, which uses this matrix to apply the Affine transformation, for each element in a list of theoretical coordinates and converts it to a NumPy array of device coordinates. The Affine transformation is helpful because it accounts for rotation, translation, shearing, and reflection, so even if the sample is slanted, the traversal should still work as planned. 
+
+The device then uses the array of device coordinates to move the chuck to each x- and y-coordinate pair in order to traverse the chip in a S-shaped/snake pattern in etching.py. When assessed visually, the code has been shown to traverse all 81 membranes with reasonable accuracy and precision. However, more robust testing is still needed on chips with a different number of membranes, chips placed at a slant, chips with different shapes, and in general to improve overall precision. 

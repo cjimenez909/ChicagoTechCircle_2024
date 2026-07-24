@@ -15,4 +15,4 @@ The device then uses the array of device coordinates to move the chuck to each x
 ### Contributors and Thank You
 Thank you to my teammate Aima Qutbuddin for contributing to this code's planning, development, and testing.
 
-Thank you to my Argonne mentors Clayton DeVault and Nazar Delegan for motivating the underlying theory behind this code and encouraging me every step of the way.
+Thank you to my mentors Clayton DeVault, Nazar Delegan, Kyle Cheek, and Dale Reed for motivating the underlying theory behind this code and encouraging me every step of the way.
